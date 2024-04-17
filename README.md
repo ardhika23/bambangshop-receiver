@@ -59,14 +59,14 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   Open another new terminal, edit `ROCKET_PORT` in `.env` to `8003`, then execute `cargo run`.
 
 ## Mandatory Checklists (Subscriber)
--   [ ] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
+-   [✔️] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Notification model struct.`
-    -   [ ] Commit: `Create SubscriberRequest model struct.`
-    -   [ ] Commit: `Create Notification database and Notification repository struct skeleton.`
-    -   [ ] Commit: `Implement add function in Notification repository.`
-    -   [ ] Commit: `Implement list_all_as_string function in Notification repository.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
+    -   [✔️] Commit: `Create Notification model struct.`
+    -   [✔️] Commit: `Create SubscriberRequest model struct.`
+    -   [✔️] Commit: `Create Notification database and Notification repository struct skeleton.`
+    -   [✔️] Commit: `Implement add function in Notification repository.`
+    -   [✔️] Commit: `Implement list_all_as_string function in Notification repository.`
+    -   [✔️] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 -   **STAGE 3: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -85,5 +85,12 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+1. 'RwLock<>' is necessary in this case to control access to the 'Vec' of Notifications in a way that allows multiple readers simultaneously while ensuring exclusive access for writers. This is important because it's common to have many reads and relatively few writes for a collection of notifications. 'RwLock<>' makes the data accessible to any number of readers until a writer needs exclusive access, which maximizes concurrent access and efficiency.
+
+A 'Mutex<>', on the other hand, would enforce exclusive access for both reading and writing operations, which can lead to unnecessary blocking. If a thread holds a 'Mutex<>' for reading, other threads that want to read would have to wait, even though they would not interfere with each other. Therefore, using 'RwLock<>' instead of 'Mutex<>' allows for more fine-grained control of concurrency, improving performance in situations where data is mostly read rather than written.
+
+2. Rust takes a more conservative approach to concurrency and memory safety than Java. In Rust, the content of a static variable is immutable by default because Rust's ownership and borrowing rules are designed to prevent data races at compile time. Data races can occur when two or more threads access the same memory location concurrently and at least one thread is writing.
+
+Mutable static variables could introduce unsafe access patterns that are difficult to manage, as any part of the code could potentially change the variable's state, leading to unpredictable behavior. The 'lazy_static' library allows us to safely declare and initialize static variables that are lazily evaluated and can include mutable data types like 'Vec' and 'DashMap', but we use synchronization primitives like 'Mutex' or 'RwLock' to safely manage access to their contents. This enforces thread safety by ensuring that mutable statics are not accessed concurrently from multiple threads without proper synchronization, aligning with Rust’s guarantees of memory safety.
 
 #### Reflection Subscriber-2
