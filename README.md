@@ -67,17 +67,17 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [✔️] Commit: `Implement add function in Notification repository.`
     -   [✔️] Commit: `Implement list_all_as_string function in Notification repository.`
     -   [✔️] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
--   **STAGE 3: Implement services and controllers**
-    -   [ ] Commit: `Create Notification service struct skeleton.`
-    -   [ ] Commit: `Implement subscribe function in Notification service.`
-    -   [ ] Commit: `Implement subscribe function in Notification controller.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification service.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification controller.`
-    -   [ ] Commit: `Implement receive_notification function in Notification service.`
-    -   [ ] Commit: `Implement receive function in Notification controller.`
-    -   [ ] Commit: `Implement list_messages function in Notification service.`
-    -   [ ] Commit: `Implement list function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
+-   **STAGE 2: Implement services and controllers**
+    -   [✔️] Commit: `Create Notification service struct skeleton.`
+    -   [✔️] Commit: `Implement subscribe function in Notification service.`
+    -   [✔️] Commit: `Implement subscribe function in Notification controller.`
+    -   [✔️] Commit: `Implement unsubscribe function in Notification service.`
+    -   [✔️] Commit: `Implement unsubscribe function in Notification controller.`
+    -   [✔️] Commit: `Implement receive_notification function in Notification service.`
+    -   [✔️] Commit: `Implement receive function in Notification controller.`
+    -   [✔️] Commit: `Implement list_messages function in Notification service.`
+    -   [✔️] Commit: `Implement list function in Notification controller.`
+    -   [✔️] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
 
 ## Your Reflections
 This is the place for you to write reflections:
@@ -86,11 +86,14 @@ This is the place for you to write reflections:
 
 #### Reflection Subscriber-1
 1. 'RwLock<>' is necessary in this case to control access to the 'Vec' of Notifications in a way that allows multiple readers simultaneously while ensuring exclusive access for writers. This is important because it's common to have many reads and relatively few writes for a collection of notifications. 'RwLock<>' makes the data accessible to any number of readers until a writer needs exclusive access, which maximizes concurrent access and efficiency.
-
 A 'Mutex<>', on the other hand, would enforce exclusive access for both reading and writing operations, which can lead to unnecessary blocking. If a thread holds a 'Mutex<>' for reading, other threads that want to read would have to wait, even though they would not interfere with each other. Therefore, using 'RwLock<>' instead of 'Mutex<>' allows for more fine-grained control of concurrency, improving performance in situations where data is mostly read rather than written.
 
 2. Rust takes a more conservative approach to concurrency and memory safety than Java. In Rust, the content of a static variable is immutable by default because Rust's ownership and borrowing rules are designed to prevent data races at compile time. Data races can occur when two or more threads access the same memory location concurrently and at least one thread is writing.
-
 Mutable static variables could introduce unsafe access patterns that are difficult to manage, as any part of the code could potentially change the variable's state, leading to unpredictable behavior. The 'lazy_static' library allows us to safely declare and initialize static variables that are lazily evaluated and can include mutable data types like 'Vec' and 'DashMap', but we use synchronization primitives like 'Mutex' or 'RwLock' to safely manage access to their contents. This enforces thread safety by ensuring that mutable statics are not accessed concurrently from multiple threads without proper synchronization, aligning with Rust’s guarantees of memory safety.
 
 #### Reflection Subscriber-2
+1. Exploring 'src/lib.rs' provided a deeper understanding of how Rust organizes library crates and modules. By looking at the root of the library crate, I learned about module declaration and how public interfaces are exposed. It was particularly insightful to see the application's entry point and how different components are wired together, providing a holistic view of the app's architecture beyond the step-by-step instructions.
+
+2. The Observer pattern inherently supports scalability by decoupling subjects (publishers) from observers (subscribers). By following this pattern, adding new subscribers is straightforward, as they simply need to be registered with the publisher. The publisher maintains a list of subscribers and notifies them without being concerned with their specific implementation. This decoupling makes the system flexible and eases the addition of new instances of the Receiver app.
+
+3. I have not yet ventured into writing my own tests or enhancing the Postman documentation, as my focus was on grasping the core tutorial concepts and ensuring that the implementation was correct. As I become more comfortable with these foundational elements, I plan to expand my skills to include these practices, which are undoubtedly valuable for ensuring code quality and maintainability.
